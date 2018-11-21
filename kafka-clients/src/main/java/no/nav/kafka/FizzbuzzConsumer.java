@@ -1,6 +1,8 @@
 package no.nav.kafka;
 
 
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import org.apache.kafka.clients.consumer.ConsumerConfig;
 import org.apache.kafka.clients.consumer.ConsumerRecord;
 import org.apache.kafka.clients.consumer.ConsumerRecords;
@@ -21,6 +23,7 @@ public class FizzbuzzConsumer {
     private final static Logger LOG = LogManager.getLogger();
 
     private final KafkaConsumer<String, String> consumer;
+    private final GsonBuilder builder = new GsonBuilder().setPrettyPrinting();
 
     public FizzbuzzConsumer(final String groupId, List<String> topics) {
         Objects.requireNonNull(groupId, "groupId cannot be empty or null");
@@ -42,6 +45,7 @@ public class FizzbuzzConsumer {
                 for (ConsumerRecord<String, String> record : records) {
                     LOG.info("topic = {}, partition = {}, offset = {}, value= {}",
                         record.topic(), record.partition(), record.offset(), record.value());
+                    //todo logic..
                 }
             }
         } finally {
