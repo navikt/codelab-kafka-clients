@@ -4,7 +4,7 @@ public class FizzBuzz {
     private FizzBuzz() {
     }
 
-    public static String fizzBuzz(final Integer candidate) {
+    public static String calculate(final Integer candidate) {
 
         if (isMultipleByThree(candidate) && isMultipleByFive(candidate)) {
             return "FizzBuzz";

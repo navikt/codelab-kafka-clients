@@ -1,8 +1,8 @@
 package no.nav.kafka;
 
-public class ProducerException extends RuntimeException {
+class ProducerException extends RuntimeException {
 
-    public ProducerException(Exception e) {
+    ProducerException(Exception e) {
         super(e);
     }
 

@@ -41,7 +41,7 @@ public class FizzBuzzProducer {
         FizzBuzzProducer producer = new FizzBuzzProducer();
 
         IntStream.range(1, 11).forEach( number -> {
-                Integer value = new Random().nextInt(1001);
+                Integer value = new Random().nextInt(100);
                 RecordMetadata metadata = producer.produce("FizzBuzzNumber", value);
                 LOG.info("Produced value {}, to topic {}, partition {}, offset {}", value, metadata.topic(), metadata.partition(), metadata.offset());
             }
