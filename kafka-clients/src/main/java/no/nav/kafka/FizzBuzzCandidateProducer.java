@@ -13,13 +13,13 @@ import java.util.Random;
 import java.util.concurrent.ExecutionException;
 import java.util.stream.IntStream;
 
-public class FizzBuzzProducer {
+public class FizzBuzzCandidateProducer {
 
 
     private final static Logger LOG = LogManager.getLogger();
     private final KafkaProducer<String, String> producer;
 
-    public FizzBuzzProducer() {
+    public FizzBuzzCandidateProducer() {
         Properties props = new Properties();
         props.put(ProducerConfig.BOOTSTRAP_SERVERS_CONFIG, "localhost:9092");
         props.put(ProducerConfig.KEY_SERIALIZER_CLASS_CONFIG, StringSerializer.class.getName());
@@ -38,11 +38,11 @@ public class FizzBuzzProducer {
 
 
     public static void main(String[] args) {
-        FizzBuzzProducer producer = new FizzBuzzProducer();
+        FizzBuzzCandidateProducer producer = new FizzBuzzCandidateProducer();
 
         IntStream.range(1, 11).forEach( number -> {
                 Integer value = new Random().nextInt(100);
-                RecordMetadata metadata = producer.produce("FizzBuzzNumber", value);
+                RecordMetadata metadata = producer.produce("FizzBuzzNumberEntered", value);
                 LOG.info("Produced value {}, to topic {}, partition {}, offset {}", value, metadata.topic(), metadata.partition(), metadata.offset());
             }
 
