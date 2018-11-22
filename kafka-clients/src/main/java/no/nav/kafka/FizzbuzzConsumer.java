@@ -54,7 +54,7 @@ public class FizzbuzzConsumer {
     }
 
     public static void main(String[] args) {
-        FizzbuzzConsumer fizzbuzzConsumer = new FizzbuzzConsumer(null, Collections.singletonList("FizzBuzzNumber"));
+        FizzbuzzConsumer fizzbuzzConsumer = new FizzbuzzConsumer(null, Collections.singletonList("FizzBuzzNumberEntered"));
         fizzbuzzConsumer.poll();
     }
 }
