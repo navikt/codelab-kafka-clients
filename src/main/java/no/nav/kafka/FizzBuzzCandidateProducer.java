@@ -1,5 +1,6 @@
 package no.nav.kafka;
 
+import org.apache.kafka.clients.producer.Callback;
 import org.apache.kafka.clients.producer.KafkaProducer;
 import org.apache.kafka.clients.producer.ProducerConfig;
 import org.apache.kafka.clients.producer.ProducerRecord;
@@ -10,43 +11,43 @@ import org.apache.logging.log4j.Logger;
 
 import java.util.Properties;
 import java.util.Random;
-import java.util.concurrent.ExecutionException;
 import java.util.stream.IntStream;
 
 public class FizzBuzzCandidateProducer {
 
 
     private final static Logger LOG = LogManager.getLogger();
-    private final KafkaProducer<String, String> producer;
 
-    public FizzBuzzCandidateProducer() {
+    public static void main(String[] args) {
         Properties props = new Properties();
         props.put(ProducerConfig.BOOTSTRAP_SERVERS_CONFIG, "localhost:9092");
         props.put(ProducerConfig.KEY_SERIALIZER_CLASS_CONFIG, StringSerializer.class.getName());
         props.put(ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG, StringSerializer.class.getName());
 
-        this.producer = new KafkaProducer<>(props);
-    }
+        final KafkaProducer<String, String> producer = new KafkaProducer<>(props);
 
-    public RecordMetadata produce(final String topic, final Number message) {
-        try {
-            return producer.send(new ProducerRecord<>(topic, message.toString())).get();
-        } catch (InterruptedException | ExecutionException e) {
-            throw new ProducerException(e);
-        }
-    }
+        IntStream.range(1, 11).forEach(n -> {
+            final Number fizzBuzzCandidate = new Random().nextInt(100);
+            final String key = "id_" + fizzBuzzCandidate;
+            final ProducerRecord<String, String> record = new ProducerRecord<>("FizzBuzzNumberEntered", key, fizzBuzzCandidate.toString());
+            producer.send(record, new Callback() {
+                @Override
+                public void onCompletion(RecordMetadata metadata, Exception exception) {
+                    if (exception == null) {
+                        LOG.info("Record send to Topic: " + metadata.topic() + " Partition: " + metadata.partition() + " Offset: " + metadata.offset());
+                    } else {
+                        LOG.error("Failed to send record to Kafka", exception);
+                    }
+
+                }
+            });
+        });
 
 
-    public static void main(String[] args) {
-        FizzBuzzCandidateProducer producer = new FizzBuzzCandidateProducer();
-
-        IntStream.range(1, 11).forEach( number -> {
-                Integer value = new Random().nextInt(100);
-                RecordMetadata metadata = producer.produce("FizzBuzzNumberEntered", value);
-                LOG.info("Produced value {}, to topic {}, partition {}, offset {}", value, metadata.topic(), metadata.partition(), metadata.offset());
-            }
-
-        );
+        // flush data
+        producer.flush();
+        // flush and close producer
+        producer.close();
 
     }
 
