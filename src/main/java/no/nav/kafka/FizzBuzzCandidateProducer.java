@@ -45,7 +45,6 @@ public class FizzBuzzCandidateProducer {
             });
         });
 
-
         // flush data
         producer.flush();
         // flush and close producer
