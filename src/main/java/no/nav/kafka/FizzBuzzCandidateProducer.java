@@ -28,8 +28,10 @@ public class FizzBuzzCandidateProducer {
 
         IntStream.range(1, 11).forEach(n -> {
             final Number fizzBuzzCandidate = new Random().nextInt(100);
-            final String key = "id_" + fizzBuzzCandidate;
-            final ProducerRecord<String, String> record = new ProducerRecord<>("FizzBuzzNumberEntered", key, fizzBuzzCandidate.toString());
+            //todo - partition key..
+            final ProducerRecord<String, String> record = new ProducerRecord<>("FizzBuzzNumberEntered", fizzBuzzCandidate.toString());
+
+            //produce record
             producer.send(record, new Callback() {
                 @Override
                 public void onCompletion(RecordMetadata metadata, Exception exception) {
