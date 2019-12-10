@@ -141,5 +141,5 @@ gradle-app.setting
 **/build/
 
 
-!libs/
+!libs/**/*.jar
 # End of https://www.gitignore.io/api/java,kotlin,gradle,intellij+all
